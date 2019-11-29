@@ -9,7 +9,7 @@ import (
 )
 
 
-var barChatId int64 = -350912043
+var barChatId int64 = -1001490386142
 
 func init() {
 	replacementBarChatId, _ := strconv.ParseInt(os.Getenv("BAR_CHAT_ID"), 10, 64)

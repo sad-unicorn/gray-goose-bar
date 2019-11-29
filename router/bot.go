@@ -2,6 +2,7 @@ package router
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	"github.com/sad-unicorn/gray-goose-bar/cwapi"
 	"log"
 )
 
@@ -30,6 +31,7 @@ func StartBot(token string) {
 		}
 		if int64(update.Message.From.ID) == update.Message.Chat.ID {
 			_, _ = bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, "pong"))
+			cwapi.Publish()
 			continue
 		}
 

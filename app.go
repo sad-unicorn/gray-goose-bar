@@ -2,14 +2,27 @@ package main
 
 import (
 	"fmt"
+	"github.com/sad-unicorn/gray-goose-bar/cwapi"
 	"github.com/sad-unicorn/gray-goose-bar/db"
 	"github.com/sad-unicorn/gray-goose-bar/router"
+	"log"
 	"os"
 )
 
 func main() {
 	initDatabase()
+	initApi()
 	router.StartBot(requireEnv("BOT_TOKEN"))
+}
+
+func initApi() {
+	login := os.Getenv("API_LOGIN")
+	password := os.Getenv( "API_PASSWORD")
+
+	if login != "" && password != "" {
+		log.Println("Connecting to API as ", login)
+		cwapi.InitAPI(login, password)
+	}
 }
 
 func initDatabase() {

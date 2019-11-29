@@ -6,7 +6,7 @@ services:
     image: mysql:8.0.18
     environment:
       MYSQL_ROOT_PASSWORD: devpass
-        MYSQL_DATABASE: gray_goose_bar
+      MYSQL_DATABASE: gray_goose_bar
     ports:
       - "3306:3306"
     volumes:
@@ -21,6 +21,8 @@ services:
       DATABASE_NAME: gray_goose_bar
       DATABASE_HOST: mysql-dev:3306
       BOT_TOKEN: ${BOT_TOKEN}
+      API_LOGIN: ${API_LOGIN}
+      API_PASSWORD: ${API_PASSWORD}
       WAIT_HOSTS: mysql-dev:3306
       HTTP_PROXY: ${HTTPS_PROXY}
     ports:

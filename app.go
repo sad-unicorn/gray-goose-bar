@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/sad-unicorn/gray-goose-bar/db"
+	"github.com/sad-unicorn/gray-goose-bar/router"
 	"log"
 	"os"
 )
@@ -62,6 +63,16 @@ func startBot() {
 		}
 		if int64(update.Message.From.ID) == update.Message.Chat.ID {
 			_, _ = bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, "pong"))
+			continue
 		}
+
+		if update.Message.Text == "/whereami" {
+			message := tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("I am at `%+v`",update.Message.Chat ))
+			message.ParseMode = "markdown"
+			_,_ = bot.Send(message)
+			continue
+		}
+
+		router.Dispatch(update.Message.From.ID, update.Message.Text)
 	}
 }

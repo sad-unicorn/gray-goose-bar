@@ -6,7 +6,7 @@ services:
     image: mysql:8.0.18
     environment:
       MYSQL_ROOT_PASSWORD: devpass
-      MYSQL_DATABASE: ggapp
+        MYSQL_DATABASE: gray_goose_bar
     ports:
       - "3306:3306"
     volumes:

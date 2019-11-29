@@ -18,7 +18,7 @@ func initDatabase() {
 	dbPass := requireEnv("DATABASE_PASS")
 	dbName := requireEnv("DATABASE_NAME")
 	dbHost := requireEnv("DATABASE_HOST")
-	dbUrl := fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, dbPass, dbHost, dbName)
+	dbUrl := fmt.Sprintf("%s:%s@tcp(%s)/%s?multiStatements=true", dbUser, dbPass, dbHost, dbName)
 	db.InitDB(dbUrl)
 
 	res, err := db.QueryForInt("SELECT 1")
@@ -27,6 +27,8 @@ func initDatabase() {
 	}
 
 	fmt.Println("Db query: ", res)
+
+	db.InitMigrations()
 }
 
 func requireEnv(key string) string {
@@ -59,7 +61,7 @@ func startBot() {
 			continue
 		}
 		if int64(update.Message.From.ID) == update.Message.Chat.ID {
-          _, _ = bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, "pong"))
-        }
+			_, _ = bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, "pong"))
+		}
 	}
 }

@@ -9,6 +9,8 @@ services:
       MYSQL_DATABASE: ggapp
     ports:
       - "3306:3306"
+    volumes:
+      - ./db/init:/docker-entrypoint-initdb.d
   gg-bar:
     image: ggbar:latest
     depends_on:
@@ -16,7 +18,7 @@ services:
     environment:
       DATABASE_USER: root
       DATABASE_PASS: devpass
-      DATABASE_NAME: ggapp
+      DATABASE_NAME: gray_goose_bar
       DATABASE_HOST: mysql-dev:3306
       BOT_TOKEN: ${BOT_TOKEN}
       WAIT_HOSTS: mysql-dev:3306

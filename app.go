@@ -2,16 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/sad-unicorn/gray-goose-bar/db"
 	"github.com/sad-unicorn/gray-goose-bar/router"
-	"log"
 	"os"
 )
 
 func main() {
 	initDatabase()
-	startBot()
+	router.StartBot(requireEnv("BOT_TOKEN"))
 }
 
 func initDatabase() {
@@ -38,41 +36,4 @@ func requireEnv(key string) string {
 		panic("No " + key + " environment variable is set")
 	}
 	return val
-}
-
-func startBot() {
-	token := requireEnv("BOT_TOKEN")
-
-	bot, err := tgbotapi.NewBotAPI(token)
-	if err != nil {
-		log.Panic(err)
-	}
-
-	bot.Debug = false
-
-	log.Printf("Authorized on account %s", bot.Self.UserName)
-
-	u := tgbotapi.NewUpdate(0)
-	u.Timeout = 60
-
-	updates, err := bot.GetUpdatesChan(u)
-
-	for update := range updates {
-		if update.Message == nil { // ignore any non-Message Updates
-			continue
-		}
-		if int64(update.Message.From.ID) == update.Message.Chat.ID {
-			_, _ = bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, "pong"))
-			continue
-		}
-
-		if update.Message.Text == "/whereami" {
-			message := tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("I am at `%+v`",update.Message.Chat ))
-			message.ParseMode = "markdown"
-			_,_ = bot.Send(message)
-			continue
-		}
-
-		router.Dispatch(update.Message.From.ID, update.Message.Text)
-	}
 }

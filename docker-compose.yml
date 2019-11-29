@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+  mysql-dev:
+    image: mysql:8.0.18
+    environment:
+      MYSQL_ROOT_PASSWORD: devpass
+      MYSQL_DATABASE: ggapp
+    ports:
+      - "3306:3306"
+  gg-bar:
+    image: ggbar:latest
+    depends_on:
+      - mysql-dev
+    environment:
+      DATABASE_USER: root
+      DATABASE_PASS: devpass
+      DATABASE_NAME: ggapp
+      DATABASE_HOST: mysql-dev:3306
+      BOT_TOKEN: ${BOT_TOKEN}
+      WAIT_HOSTS: mysql-dev:3306
+      HTTP_PROXY: ${HTTPS_PROXY}
+    ports:
+      - "8080:8080"
+    links:
+      - mysql-dev

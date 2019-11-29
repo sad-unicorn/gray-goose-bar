@@ -9,6 +9,13 @@ RUN dep ensure --vendor-only
 COPY . ./
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix nocgo -o /gray-goose-bar .
 
-FROM scratch
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
+RUN chmod +x /wait
+
+FROM alpine
 COPY --from=builder /gray-goose-bar ./
-ENTRYPOINT ["./gray-goose-bar"]
+COPY --from=builder /wait ./
+
+EXPOSE 8080
+
+CMD /wait && /gray-goose-bar
